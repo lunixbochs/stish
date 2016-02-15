@@ -16,7 +16,7 @@ def stish_exec(view, cont=False):
         if match:
             cmd = match.group(1)
 
-        if cmd is None:
+        if cmd is None or not cmd.strip():
             with Edit(view) as edit:
                 edit.insert(line.b, '\n')
             sel.clear()
@@ -24,7 +24,9 @@ def stish_exec(view, cont=False):
         else:
             p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             out, err = p.communicate('')
-            text = '\n' + ((out.decode('utf8', 'replace') or '') + (err.decode('utf8', 'replace') or '')).strip() + '\n'
+            text = ((out.decode('utf8', 'replace') or '') + (err.decode('utf8', 'replace') or '')).strip() + '\n'
+            if text.strip():
+                text = '\n' + text
             # TODO: generic "add text and fix cursor"?
             # or just do this all independently of cursor and catch up later
             with Edit(view) as edit:

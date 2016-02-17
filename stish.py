@@ -8,6 +8,10 @@ def apply_stish_settings(view):
     settings.set('tab_size', 2)
     settings.set('translate_tabs_to_spaces', True)
     settings.set('syntax', 'Packages/stish/stish.tmLanguage')
+    settings.set('line_numbers', False)
+    settings.set('gutter', False)
+    view.set_scratch(True)
+    view.set_name('Terminal')
 
 def setup_stish_view(view):
     apply_stish_settings(view)

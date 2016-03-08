@@ -4,6 +4,9 @@ import subprocess
 from .edit import Edit
 from . import common
 
+def fix_scroll(view, sel, line):
+    view.show(sel, False)
+
 def stish_exec(view, cont=False):
     sel = view.sel()
     cur = sel[0].b
@@ -21,6 +24,7 @@ def stish_exec(view, cont=False):
                 edit.insert(line.b, '\n')
             sel.clear()
             sel.add(cur + 1)
+            fix_scroll(view, sel, line)
         else:
             p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             out, err = p.communicate('')
@@ -33,6 +37,7 @@ def stish_exec(view, cont=False):
                 edit.insert(line.b, text)
             sel.clear()
             sel.add(cur + len(text))
+            fix_scroll(view, sel, line)
 
         # if not cont, need to wait until command is done printing
         # this depends on async output really

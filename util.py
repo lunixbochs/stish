@@ -35,6 +35,18 @@ def find_path(env):
 
     return p
 
+def memoize(f):
+    rets = {}
+
+    def wrap(*args):
+        if not args in rets:
+            rets[args] = f(*args)
+
+        return rets[args]
+
+    wrap.__name__ = f.__name__
+    return wrap
+
 @memoize
 def create_environment():
     if os.name == 'posix':

@@ -40,6 +40,6 @@ class StishListener(sublime_plugin.EventListener):
             apply_stish_settings(view)
 
     def on_query_context(self, view, key, operator, operand, match_all):
-        if key == 'stish-interact' and is_stish_view(view):
+        if key == 'stish-interact' and common.is_stish_view(view):
             # TODO: see if we're in a stish interactive output region?
             return False

@@ -1,8 +1,10 @@
 import re
 import sublime, sublime_plugin
 import subprocess
+
 from .edit import Edit
 from . import common
+from . import shell
 
 def fix_scroll(view, sel, line):
     view.show(sel, False)
@@ -23,12 +25,10 @@ def stish_exec(view, cont=False):
             with Edit(view) as edit:
                 edit.insert(line.b, '\n')
             sel.clear()
-            sel.add(cur + 1)
+            sel.add(line.b + 1)
             fix_scroll(view, sel, line)
         else:
-            p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            out, err = p.communicate('')
-            text = ((out.decode('utf8', 'replace') or '') + (err.decode('utf8', 'replace') or '')).strip() + '\n'
+            text = shell.run(cmd)
             if text.strip():
                 text = '\n' + text
             # TODO: generic "add text and fix cursor"?
@@ -36,7 +36,7 @@ def stish_exec(view, cont=False):
             with Edit(view) as edit:
                 edit.insert(line.b, text)
             sel.clear()
-            sel.add(cur + len(text))
+            sel.add(line.b + len(text))
             fix_scroll(view, sel, line)
 
         # if not cont, need to wait until command is done printing

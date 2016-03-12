@@ -36,7 +36,7 @@ class StishKeypress(sublime_plugin.TextCommand):
 
 class StishListener(sublime_plugin.EventListener):
     def on_load(self, view):
-        if is_stish_view(view):
+        if common.is_stish_view(view):
             apply_stish_settings(view)
 
     def on_query_context(self, view, key, operator, operand, match_all):
